@@ -16,6 +16,27 @@ set(SOURCE_GUMBO
     vector.c
 )
 
+set(HEADER_GUMBO
+        include/gumbo/attribute.h
+        include/gumbo/char_ref.h
+        include/gumbo/error.h
+        include/gumbo.h
+        include/gumbo/insertion_mode.h
+        include/gumbo/parser.h
+        include/gumbo/string_buffer.h
+        include/gumbo/string_piece.h
+        include/gumbo/tag_enum.h
+        include/gumbo/tag_gperf.h
+        include/gumbo/tag_sizes.h
+        include/gumbo/tag_strings.h
+        include/gumbo/token_type.h
+        include/gumbo/tokenizer.h
+        include/gumbo/tokenizer_states.h
+        include/gumbo/utf8.h
+        include/gumbo/util.h
+        include/gumbo/vector.h
+)
+
 add_library(${PROJECT_NAME} ${SOURCE_GUMBO})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -26,5 +47,4 @@ if(MSVC)
     target_include_directories(${PROJECT_NAME} PRIVATE visualc/include)
 endif()
 
-# Export gumbo includes.
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE include/gumbo)

@@ -81,10 +81,9 @@ void litehtml::html_tag::set_attr( const tchar_t* name, const tchar_t* val )
 	if(name && val)
 	{
 		tstring s_val = name;
-		std::locale lc = std::locale::global(std::locale::classic());
 		for(size_t i = 0; i < s_val.length(); i++)
 		{
-			s_val[i] = std::tolower(s_val[i], lc);
+			s_val[i] = std::tolower(s_val[i], std::locale::classic());
 		}
 		m_attrs[s_val] = val;
 
@@ -96,7 +95,7 @@ void litehtml::html_tag::set_attr( const tchar_t* name, const tchar_t* val )
 	}
 }
 
-const litehtml::tchar_t* litehtml::html_tag::get_attr( const tchar_t* name, const tchar_t* def )
+const litehtml::tchar_t* litehtml::html_tag::get_attr( const tchar_t* name, const tchar_t* def ) const
 {
 	string_map::const_iterator attr = m_attrs.find(name);
 	if(attr != m_attrs.end())
@@ -353,6 +352,7 @@ void litehtml::html_tag::parse_styles(bool is_reparse)
 		}
 	}
 	else if (m_display == display_table ||
+		m_display == display_inline_table ||
 		m_display == display_table_caption ||
 		m_display == display_table_cell ||
 		m_display == display_table_column ||
@@ -2017,10 +2017,9 @@ bool litehtml::html_tag::is_break() const
 void litehtml::html_tag::set_tagName( const tchar_t* tag )
 {
 	tstring s_val = tag;
-	std::locale lc = std::locale::global(std::locale::classic());
 	for(size_t i = 0; i < s_val.length(); i++)
 	{
-		s_val[i] = std::tolower(s_val[i], lc);
+		s_val[i] = std::tolower(s_val[i], std::locale::classic());
 	}
 	m_tag = s_val;
 }
@@ -2306,6 +2305,7 @@ int litehtml::html_tag::place_element(const element::ptr &el, int max_width)
 			switch(el->get_display())
 			{
 			case display_inline_block:
+			case display_inline_table:
 				ret_width = el->render(line_ctx.left, line_ctx.top, line_ctx.right);
 				break;
 			case display_block:		
@@ -4157,12 +4157,12 @@ int litehtml::html_tag::render_box(int x, int y, int max_width, bool second_pass
 	if (ret_width < max_width && !second_pass && have_parent())
 	{
 		if (m_display == display_inline_block ||
-			m_css_width.is_predefined() &&
+			(m_css_width.is_predefined() &&
 			(m_float != float_none ||
 			m_display == display_table ||
 			m_el_position == element_position_absolute ||
 			m_el_position == element_position_fixed
-			)
+			))
 			)
 		{
 			render(x, y, ret_width, true);
