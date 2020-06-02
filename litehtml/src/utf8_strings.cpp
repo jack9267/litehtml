@@ -8,6 +8,14 @@ litehtml::utf8_to_wchar::utf8_to_wchar(const char* val)
 	m_utf8 = (const byte*) val;
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> conversion;
 	m_str = conversion.from_bytes(val);
+#if 0
+	while (true)
+	{
+		ucode_t wch = get_char();
+		if (!wch) break;
+		m_str += wch;
+	}
+#endif
 }
 
 litehtml::ucode_t litehtml::utf8_to_wchar::get_char()
@@ -58,8 +66,41 @@ litehtml::ucode_t litehtml::utf8_to_wchar::get_char()
 	return '?';
 }
 
-litehtml::wchar_to_utf8::wchar_to_utf8(const wchar_t* val)
+litehtml::wchar_to_utf8::wchar_to_utf8(const std::wstring& val)
 {
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> conversion;
 	m_str = std::move(conversion.to_bytes(val));
+#if 0
+	unsigned int code;
+	for (int i = 0; val[i]; i++)
+	{
+		code = val[i];
+		if (code <= 0x7F)
+		{
+			m_str += (char)code;
+		}
+		else if (code <= 0x7FF)
+		{
+			m_str += (code >> 6) + 192;
+			m_str += (code & 63) + 128;
+		}
+		else if (0xd800 <= code && code <= 0xdfff)
+		{
+			//invalid block of utf8
+		}
+		else if (code <= 0xFFFF)
+		{
+			m_str += (code >> 12) + 224;
+			m_str += ((code >> 6) & 63) + 128;
+			m_str += (code & 63) + 128;
+		}
+		else if (code <= 0x10FFFF)
+		{
+			m_str += (code >> 18) + 240;
+			m_str += ((code >> 12) & 63) + 128;
+			m_str += ((code >> 6) & 63) + 128;
+			m_str += (code & 63) + 128;
+		}
+	}
+#endif
 }

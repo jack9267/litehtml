@@ -16,7 +16,7 @@ if(WIN32)
 	add_definitions(-D_UNICODE)
 endif()
 
-add_definitions(-DLITEHTML_UTF8)
+#add_definitions(-DLITEHTML_UTF8)
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/litehtml/include")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/litehtml/include/litehtml")

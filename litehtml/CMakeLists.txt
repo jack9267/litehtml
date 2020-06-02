@@ -23,6 +23,7 @@ set(SOURCE_LITEHTML
     src/el_font.cpp
     src/el_image.cpp
     src/el_link.cpp
+    src/el_li.cpp
     src/el_para.cpp
     src/el_script.cpp
     src/el_space.cpp
@@ -41,6 +42,7 @@ set(SOURCE_LITEHTML
     src/table.cpp
     src/utf8_strings.cpp
     src/web_color.cpp
+    src/num_cvt.cpp
 )
 
 set(HEADER_LITEHTML
@@ -88,6 +90,7 @@ set(HEADER_LITEHTML
     include/litehtml/types.h
     include/litehtml/utf8_strings.h
     include/litehtml/web_color.h
+    include/litehtml/num_cvt.h
 )
 
 add_library(${PROJECT_NAME} ${SOURCE_LITEHTML})
@@ -97,4 +100,4 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     C_STANDARD 99
 )
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC LITEHTML_UTF8)
+#target_compile_definitions(${PROJECT_NAME} PUBLIC LITEHTML_UTF8)
