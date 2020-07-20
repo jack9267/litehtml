@@ -106,6 +106,7 @@ namespace litehtml
 
 		void create_node(void* gnode, elements_vector& elements, bool parseTextNode);
 		bool update_media_lists(const media_features& features);
+	public:
 		void fix_tables_layout();
 		void fix_table_children(element::ptr& el_ptr, style_display disp, const tchar_t* disp_str);
 		void fix_table_parent(element::ptr& el_ptr, style_display disp, const tchar_t* disp_str);
