@@ -648,13 +648,22 @@ void litehtml::document::add_media_list( media_query_list::ptr list )
 	}
 }
 
-void litehtml::document::create_node(void* gnode, elements_vector& elements, bool parseTextNode)
+void litehtml::document::create_node(void* gnode, elements_vector& elements, bool parseTextNode, bool bIgnoreImpliedElements)
 {
 	GumboNode* node = (GumboNode*)gnode;
 	switch (node->type)
 	{
 	case GUMBO_NODE_ELEMENT:
 		{
+            if (bIgnoreImpliedElements && (node->parse_flags & GUMBO_INSERTION_IMPLIED) != 0)
+			{
+				for (unsigned int i = 0; i < node->v.element.children.length; i++)
+				{
+					create_node(static_cast<GumboNode*>(node->v.element.children.data[i]), elements, parseTextNode, bIgnoreImpliedElements);
+				}
+				return;
+            }
+
 			string_map attrs;
 			GumboAttribute* attr;
 			for (unsigned int i = 0; i < node->v.element.attributes.length; i++)
@@ -690,7 +699,7 @@ void litehtml::document::create_node(void* gnode, elements_vector& elements, boo
 				for (unsigned int i = 0; i < node->v.element.children.length; i++)
 				{
 					child.clear();
-					create_node(static_cast<GumboNode*> (node->v.element.children.data[i]), child, parseTextNode);
+					create_node(static_cast<GumboNode*> (node->v.element.children.data[i]), child, parseTextNode, bIgnoreImpliedElements);
 					std::for_each(child.begin(), child.end(), 
 						[&ret](element::ptr& el)
 						{
@@ -972,7 +981,7 @@ void litehtml::document::append_children_from_utf8(element& parent, const char* 
 
 	// Create litehtml::elements.
 	elements_vector child_elements;
-	create_node(output->root, child_elements, true);
+	create_node(output->root, child_elements, true, true);
 
 	// Destroy GumboOutput
 	gumbo_destroy_output(&kGumboDefaultOptions, output);
