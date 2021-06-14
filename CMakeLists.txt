@@ -5,7 +5,9 @@ cmake_minimum_required(VERSION 3.13)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/litehtml/include")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/litehtml/include/litehtml")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/litehtml/src/gumbo/include")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/litehtml/src/gumbo/visualc/include")
+if(MSVC)
+	include_directories("${CMAKE_CURRENT_SOURCE_DIR}/litehtml/src/gumbo/visualc/include")
+endif()
 
 disable_rtti()
 
