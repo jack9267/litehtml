@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.13)
 
 #add_definitions(-DLITEHTML_UTF8)
 
+set(BUILD_TESTING OFF)
+
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/litehtml/include")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/litehtml/include/litehtml")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/litehtml/src/gumbo/include")
@@ -26,6 +28,9 @@ if(MSVC)
 endif()
 
 add_subdirectory(litehtml)
+
+set_target_properties(litehtml PROPERTIES PUBLIC_HEADER "")
+set_target_properties(gumbo PROPERTIES PUBLIC_HEADER "")
 
 install_include("${CMAKE_CURRENT_SOURCE_DIR}/litehtml/include")
 

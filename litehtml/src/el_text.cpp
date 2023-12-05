@@ -13,25 +13,6 @@ litehtml::el_text::el_text(const tchar_t* text, const std::shared_ptr<litehtml::
 	m_draw_spaces		= true;
 }
 
-litehtml::el_text::~el_text()
-{
-
-}
-
-void litehtml::el_text::set_text(const tchar_t* text)
-{
-	if (text)
-	{
-		m_text = text;
-	}
-	else
-	{
-		m_text.clear();
-	}
-	m_text_transform = text_transform_none;
-	m_use_transformed = false;
-}
-
 void litehtml::el_text::get_content_size( size& sz, int max_width )
 {
 	sz = m_size;
@@ -42,7 +23,7 @@ void litehtml::el_text::get_text( tstring& text )
 	text += m_text;
 }
 
-const litehtml::tchar_t* litehtml::el_text::get_style_property( const tchar_t* name, bool inherited, const tchar_t* def /*= 0*/ )
+const litehtml::tchar_t* litehtml::el_text::get_style_property( const tchar_t* name, bool inherited, const tchar_t* def /*= 0*/ ) const
 {
 	if(inherited)
 	{
@@ -198,5 +179,5 @@ litehtml::css_offsets litehtml::el_text::get_css_offsets() const
 		}
 		p = p->parent();
 	}
-	return css_offsets();
+	return {};
 }
